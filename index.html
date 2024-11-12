@@ -1,0 +1,151 @@
+<html>
+
+<head>
+    <title>DevTools Emulate Extractor</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!-- Bulma V1.0.2 from cdnjs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.2/css/bulma.min.css" />
+    <!-- FontAwesome V6.6.0 from cdnjs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <meta http-equiv="Accept-CH" content="DPR, Width, Viewport-Width, Downlink" />
+    <style>
+        td {
+            cursor: pointer;
+        }
+
+        td::after {
+            content: "\f0c5";
+            font-family: "Font Awesome 6 Free";
+            margin-left: 10px;
+        }
+    </style>
+    <script>
+        const d = (id, text) => {
+            const element = document.getElementById(id);
+            element.textContent = text;
+            element.addEventListener("click", () => {
+                if (navigator.clipboard) {
+                    navigator.clipboard
+                        .writeText(text)
+                        .then(() => {
+                            alert("クリップボードにコピーしました");
+                        })
+                        .catch((err) => {
+                            fallbackCopyTextToClipboard(text);
+                        });
+                } else {
+                    fallbackCopyTextToClipboard(text);
+                }
+            });
+        };
+
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; // Avoid scrolling to bottom
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand("copy");
+                alert("クリップボードにコピーしました");
+            } catch (err) {
+                console.error("Fallback: Oops, unable to copy", err);
+            }
+            document.body.removeChild(textArea);
+        }
+        const refresh = () => {
+            d("pixelRatio", window.devicePixelRatio);
+            d("screenWidth", window.screen.width);
+            d("screenHeight", window.screen.height);
+            d("browserWidth", window.innerWidth);
+            d("browserHeight", window.innerHeight);
+            d("userAgent", navigator.userAgent);
+            d("secUA", navigator.userAgentData?.brands[0]?.brand);
+            d("secUAfv", navigator.userAgentData?.brands[0]?.fullVersion);
+            d("secUAp", navigator.userAgentData?.platform);
+            d("secUApv", navigator.userAgentData?.platformVersion);
+            d("secUAa", navigator.userAgentData?.architecture);
+            d("secUAm", navigator.userAgentData?.model);
+        };
+        document.addEventListener("DOMContentLoaded", refresh);
+        window.addEventListener("resize", refresh);
+    </script>
+</head>
+
+<body>
+    <div class="m-6">
+        <h1 class="title">DevTools Emulate Extractor</h1>
+        <p class="subtitle">by @ogatomo21</p>
+        <p>
+            このツールを使うとDevToolsでデバイスサイズをエミュレートするときに使う各種情報が取得できます。
+        </p>
+        <div class="table-container">
+            <table class="table is-fullwidth is-hoverable is-striped">
+                <thead>
+                    <tr>
+                        <th>項目名</th>
+                        <th>内容</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <th>画面の幅</th>
+                    <td id="screenWidth"></td>
+                </tr>
+                <tr>
+                    <th>画面の高さ</th>
+                    <td id="screenHeight"></td>
+                </tr>
+                <tr>
+                    <th>ブラウザの幅</th>
+                    <td id="browserWidth"></td>
+                </tr>
+                <tr>
+                    <th>ブラウザの高さ</th>
+                    <td id="browserHeight"></td>
+                </tr>
+                <tr>
+                    <th>ピクセル比</th>
+                    <td id="pixelRatio"></td>
+                </tr>
+                <tr>
+                    <th>UserAgent</th>
+                    <td id="userAgent"></td>
+                </tr>
+                <tr>
+                    <th>Sec-CH-UA</th>
+                    <td id="secUA"></td>
+                </tr>
+                <tr>
+                    <th>Sec-CH-UA-Full-Browser-Version</th>
+                    <td id="secUAfv"></td>
+                </tr>
+                <tr>
+                    <th>Sec-CH-UA-Platform</th>
+                    <td id="secUAp"></td>
+                </tr>
+                <tr>
+                    <th>Sec-CH-UA-PlatformVersion</th>
+                    <td id="secUApv"></td>
+                </tr>
+                <tr>
+                    <th>Sec-CH-UA-Arch</th>
+                    <td id="secUAa"></td>
+                </tr>
+                <tr>
+                    <th>Sec-CH-UA-Model</th>
+                    <td id="secUAm"></td>
+                </tr>
+            </table>
+        </div>
+        <hr>
+        <p><small>※お使いのブラウザによってはUser-Agent Client Hints(UA-CH)が一部表示されないことがあります。しかし、この項目を入力しないことによる不都合等は現時点ではあまりないかと思われるので特に心配はいりません。</small></p>
+        <hr>
+        <p>
+            Created by <a href="https://github.com/ogatomo21">@ogatomo21</a><br>
+            <a href="https://github.com/ogatomo21/DevTools-Emulate-Extractor">View on GitHub</a>
+        </p>
+    </div>
+</body>
+
+</html>
